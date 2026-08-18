@@ -86,6 +86,7 @@ class ServerConfigurationStructureService
             }),
             'egg' => [
                 'id' => $server->egg->uuid,
+                'name' => $server->egg->name,
                 'file_denylist' => $server->egg->inherit_file_denylist,
             ],
         ];
