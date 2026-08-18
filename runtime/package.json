@@ -1,0 +1,19 @@
+{
+  "name": "hypixel-runtime",
+  "version": "1.0.0",
+  "description": "Hypixel Panel runtime daemon adapter (Docker-based Minecraft server control, Wings-compatible API)",
+  "main": "hypixel-adapter.js",
+  "scripts": {
+    "start": "node hypixel-adapter.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "9.6.0",
+    "dockerode": "4.0.12",
+    "express": "4.22.2",
+    "jsonwebtoken": "9.0.3",
+    "ws": "8.21.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

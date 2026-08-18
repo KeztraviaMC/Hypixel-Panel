@@ -1,0 +1,13 @@
+# root — belt & suspenders (sub-dirs have their own too)
+**/.env
+**/node_modules/
+**/vendor/
+panel/storage/framework/cache/*
+panel/storage/framework/sessions/*
+panel/storage/framework/views/*
+panel/storage/logs/*
+panel/bootstrap/cache/*.php
+runtime/servers/
+*.log
+*.bak
+.DS_Store

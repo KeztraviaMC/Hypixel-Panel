@@ -1,0 +1,6 @@
+node_modules/
+servers/
+*.log
+*.bak
+.env
+.DS_Store
