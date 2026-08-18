@@ -232,6 +232,10 @@ systemctl enable --now hypixel-panel hypixel-runtime hypixel-queue >/dev/null 2>
 
 # ---------- 8. nginx ----------
 say "Configuring nginx..."
+# login rate-limit zone (http-level, idempotent)
+if ! grep -q "zone=hypixel_login" /etc/nginx/nginx.conf; then
+  sed -i "s#http {#http {\n\tlimit_req_zone \$binary_remote_addr zone=hypixel_login:10m rate=5r/m;#" /etc/nginx/nginx.conf
+fi
 cat > /etc/nginx/sites-available/hypixel.conf <<NGINX
 map \$http_upgrade \$connection_upgrade { default upgrade; '' close; }
 server {
@@ -239,6 +243,19 @@ server {
     server_name ${FQDN};
     client_max_body_size 8g;
 
+    add_header X-Frame-Options DENY always;
+    add_header X-Content-Type-Options nosniff always;
+
+    location = /auth/login {
+        limit_req zone=hypixel_login burst=5 nodelay;
+        limit_req_status 429;
+        proxy_pass http://127.0.0.1:${PANEL_PORT};
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
     location = /api/system { proxy_pass http://127.0.0.1:${ADAPTER_PORT}; proxy_http_version 1.1; proxy_set_header Host \$host; proxy_set_header Authorization \$http_authorization; }
     location ^~ /api/servers { proxy_pass http://127.0.0.1:${ADAPTER_PORT}; proxy_http_version 1.1; proxy_set_header Host \$host; proxy_set_header Authorization \$http_authorization; proxy_set_header Upgrade \$http_upgrade; proxy_set_header Connection \$connection_upgrade; proxy_read_timeout 86400; proxy_send_timeout 86400; }
     location = /upload/file { proxy_pass http://127.0.0.1:${ADAPTER_PORT}; proxy_http_version 1.1; proxy_set_header Host \$host; proxy_set_header Authorization \$http_authorization; proxy_request_buffering off; client_max_body_size 8g; proxy_read_timeout 86400; }

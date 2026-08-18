@@ -75,7 +75,7 @@
 
                                 <option value="{{ $node->id }}"
                                     @if($location->id === old('location_id')) selected @endif
-                                >{{ env('HYPIXEL_PUBLIC_IP', $node->fqdn) }}</option>
+                                >{{ config('hypixel.public_ip') ?: $node->fqdn }}</option>
 
                                 @endforeach
                                 </optgroup>

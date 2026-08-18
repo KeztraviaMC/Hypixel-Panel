@@ -18,7 +18,7 @@ class AllocationTransformer extends BaseClientTransformer
     {
         return [
             'id' => $model->id,
-            'ip' => $model->ip === '0.0.0.0' ? env('HYPIXEL_PUBLIC_IP', $model->ip) : $model->ip,
+            'ip' => $model->ip === '0.0.0.0' ? (config('hypixel.public_ip') ?: $model->ip) : $model->ip,
             'ip_alias' => $model->ip_alias,
             'port' => $model->port,
             'notes' => $model->notes,
