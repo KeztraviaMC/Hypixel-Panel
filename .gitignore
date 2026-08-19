@@ -2,6 +2,9 @@
 **/.env
 **/node_modules/
 **/vendor/
+# but keep the frontend theme vendor assets (bootstrap/adminlte/select2 etc)
+!panel/public/themes/pterodactyl/vendor/
+!panel/public/themes/pterodactyl/vendor/**
 panel/storage/framework/cache/*
 panel/storage/framework/sessions/*
 panel/storage/framework/views/*
